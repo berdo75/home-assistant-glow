@@ -65,7 +65,11 @@ sensor:
       # multiply value = (60 / imp value) * 1000
       # - multiply: 60
       - lambda: return x * ((60.0 / id(select_pulse_rate).state) * 1000.0);
-
+      - lambda: |-
+          if (x > 8000) {            // over 8 kW -> error
+            return id(sensor_energy_pulse_meter).state; 
+          }
+          return x;  
     total:
       id: sensor_total_energy
       name: '${friendly_name} - Total Energy'
